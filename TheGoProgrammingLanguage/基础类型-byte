@@ -1,0 +1,47 @@
+
+
+# []byte和string？
+[]byte和string是可以互相转换的，string是不可变的，[]byte是可变的。
+因此[]byte(s)转换实际上是分配了一个新的字节数组用于保存字符串数据的拷贝，然后引用这个底层的字节数组(不一定每次都是新建)。
+编译器的优化可以避免在一些场景下分配和复制字符串数据，但总的来说需要确保在变量b被修改的情况下，原始的s字符串也不会改变。
+
+为了避免转换中不必要的内存分配，bytes包和strings同时提供了许多实用函数。下面是strings包中的六个函数
+``
+func Contains(s, substr string) bool
+func Count(s, sep string) int
+func Fields(s string) []string
+func HasPrefix(s, prefix string) bool
+func Index(s, sep string) int
+func Join(a []string, sep string) string
+``
+bytes包和strings包提供了类似的函数，不过是参数由string转成[]byte
+
+
+# byte类型
+byte就是unit8
+
+``
+// byte is an alias for uint8 and is equivalent to uint8 in all ways.
+b := byte(1)
+b2 := byte('龙') // 会报错，中文需要两个byte
+b := byte(100000) // 会报错，存不下
+b2 := byte('1') // 可以转换
+``
+
+# golang uint64转byte
+byte就是unit8，大转小会直接忽略高位的数值.
+位运算，右移
+
+``
+// byte is an alias for uint8 and is equivalent to uint8 in all ways.
+u := uint64(256)     // 超过unit8的范围, 00000001 00000000
+fmt.Println(byte(u)) // 转成byte，取后8位00000000 。 0
+u2 := u >> (1 * 8)   // 右移8位， 00000000 00000001
+fmt.Println(u2)      // 1
+fmt.Println(u)       // 256
+``
+
+# 位运算，
+& 与运算
+| 或运算
+^ 异或运算 
